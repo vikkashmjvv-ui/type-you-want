@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Type You Want</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08090b;--ink:#e9eef2;--mute:#8d99a5;--card:#13171c;--line:#252c34;--teal:#2bb3a5;--teal-d:#1a8a7e;--amber:#f5b83d;--red:#ef6a6a;--green:#46c27c;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Sora,system-ui,sans-serif;min-height:100vh}
+header{display:none;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--line);gap:12px}
+header.on{display:flex}
+.logo{display:flex;gap:10px;align-items:center;font-weight:800;font-size:20px;cursor:pointer}
+.key{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:8px;background:var(--teal);color:#fff;border-bottom:4px solid var(--teal-d);font-family:'JetBrains Mono',monospace}
+.me{display:flex;gap:16px;align-items:center;color:var(--mute);font-size:14px}.me b{color:var(--ink)}
+.me button{background:none;border:1px solid var(--line);color:var(--mute);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+header{background:#0d0f12}
+main{max-width:980px;margin:0 auto;padding:32px 20px 60px}
+.view{display:none}.view.on{display:block}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:8px 0 10px;font-weight:800;letter-spacing:-.02em}
+h2{font-size:24px;margin:0 0 6px}h3{margin:28px 0 12px;font-size:17px}
+p.sub{color:var(--mute);margin:0 0 28px;max-width:560px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px}
+.mode{background:var(--card);border:1px solid var(--line);border-bottom:5px solid var(--line);border-radius:14px;padding:22px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:transform .12s,border-color .12s}
+.mode:hover{transform:translateY(-3px);border-bottom-color:var(--teal)}.mode:active{transform:translateY(1px)}
+.mode b{display:block;font-size:18px;margin:10px 0 6px}.mode span{color:var(--mute);font-size:14px;line-height:1.5}.ico{font-size:28px}
+.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:12px 22px;background:var(--teal);color:#fff;border-bottom:4px solid var(--teal-d);cursor:pointer}
+.btn:active{transform:translateY(2px);border-bottom-width:2px}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line);border-bottom:4px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.back{background:none;border:0;color:var(--mute);font:inherit;cursor:pointer;padding:0;margin-bottom:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+.chip{font:inherit;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+input[type=text],input[type=email],textarea.own{font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+input:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:1px}
+textarea.own{min-height:130px;font-family:'JetBrains Mono',monospace;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px;max-width:440px;margin:40px auto}
+.card label{display:block;font-size:14px;color:var(--mute);margin:16px 0 6px}
+.card .btn{width:100%;margin-top:22px}
+.otpbox{display:flex;gap:8px;justify-content:center}.otpbox .ob{width:48px;height:58px;padding:0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600}
+.err{color:var(--red);min-height:22px;margin-top:12px;font-size:14px}.note{color:var(--mute);font-size:13px;line-height:1.5;margin-top:10px}
+.stats{display:flex;gap:28px;margin-bottom:16px;flex-wrap:wrap}
+.stat small{display:block;color:var(--mute);font-size:13px}.stat b{font-size:30px;font-variant-numeric:tabular-nums}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:18px}.bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .15s}
+.ptitle{color:var(--mute);font-size:14px;margin-bottom:10px;min-height:20px}
+.paper{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 28px;font-family:'JetBrains Mono',monospace;font-size:22px;line-height:2;max-height:270px;overflow:hidden;cursor:text;position:relative;text-align:left}
+.paper .w{display:inline-block;white-space:pre}
+.paper span{border-radius:3px}.ok{color:var(--green)}.bad{color:var(--red);background:color-mix(in srgb,var(--red) 18%,transparent)}
+.paper .w>span:not(.ok):not(.bad){color:var(--mute)}
+.cur{display:inline-block;width:0;height:1.2em;vertical-align:text-bottom;border-left:2px solid var(--amber);margin-left:-1px;animation:blink 1s steps(1) infinite}@keyframes blink{50%{border-color:transparent}}
+.hint{color:var(--mute);font-size:14px;margin:12px 0}
+#ta{position:absolute;opacity:0;pointer-events:none;left:0;top:0}
+.search{display:flex;gap:10px;margin-bottom:20px;max-width:520px}
+.bgrid{align-items:start;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px}
+.book{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.cover{position:relative;aspect-ratio:2/3;border-radius:4px 10px 10px 4px;background:linear-gradient(135deg,var(--teal-d),#0d3d39);overflow:hidden;box-shadow:inset 6px 0 0 rgba(0,0,0,.25),0 8px 18px rgba(0,0,0,.5);display:flex;align-items:flex-end;padding:12px;color:#fff;font-weight:600;font-size:14px;transition:transform .12s}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.cover img+span{display:none}
+.book:hover .cover{transform:translateY(-4px)}
+.book b{display:block;font-size:14px;margin-top:10px;line-height:1.3}.book small{color:var(--mute)}
+.prog{font-size:12px;color:var(--teal);margin-top:4px;display:block}
+.snd{background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer}.snd.off{color:var(--mute)}
+.loading{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;place-items:center;z-index:10;text-align:center;line-height:1.7}.loading div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 36px}
+.spin{width:34px;height:34px;border:4px solid var(--line);border-top-color:var(--teal);border-radius:50%;margin:0 auto 14px;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#3a1515;border:1px solid var(--red);color:#ffd5d5;padding:12px 18px;border-radius:12px;z-index:11;display:none;max-width:min(560px,92vw);font-size:14px;line-height:1.5;cursor:pointer}
+.players{display:grid;gap:10px;margin:18px 0}
+.pl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.pl .t{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px}.pl .bar{margin:0}.pl.mine .bar i{background:var(--amber)}
+.code{font-family:'JetBrains Mono',monospace;font-size:44px;letter-spacing:.2em;font-weight:600;background:var(--card);border:2px dashed var(--teal);border-radius:14px;padding:10px 24px;display:inline-block;margin:10px 0 18px}
+.big{text-align:center;padding:30px 0}.big .num{font-size:clamp(60px,12vw,110px);font-weight:800;line-height:1;color:var(--teal)}
+.res{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:24px 0}.res div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 28px}
+.res small{display:block;color:var(--mute)}.res b{font-size:30px}
+.count{position:fixed;inset:0;background:rgba(10,18,24,.85);display:none;place-items:center;color:#fff;font-size:140px;font-weight:800;z-index:9}
+@media(max-width:600px){.paper{font-size:17px;padding:16px}header{padding:12px 16px}.me span{display:none}}
+</style></head><body>
+<header id="hdr"><div class="logo" onclick="go('home')"><span class="key">T</span>Type You Want</div>
+<div class="me"><button class="snd" onclick="toggleSnd()"></button><span id="best"></span><b id="uname"></b><button onclick="logout()">Log out</button></div></header>
+<main>
+
+<section class="view on" id="auth">
+  <div class="card">
+    <div class="logo" style="margin-bottom:6px"><span class="key">T</span>Type You Want</div>
+    <p class="note" style="margin:0 0 6px">Create your account or log in. We verify your email with a one-time code.</p>
+    <div id="a1">
+      <label for="aname">Your name</label><input type="text" id="aname" maxlength="24" autocomplete="name" placeholder="Enter your name">
+      <label for="aemail">Email address</label><input type="email" id="aemail" autocomplete="email" placeholder="you@example.com">
+      <button class="btn" id="asend" onclick="sendCode()">Send code</button>
+    </div>
+    <div id="a2" style="display:none">
+      <label>Enter the 6-digit code sent to <b id="ashow"></b></label>
+      <div class="otpbox" id="otpbox"><input type="text" class="ob" inputmode="numeric" maxlength="6" aria-label="Digit 1" autocomplete="one-time-code"><input type="text" class="ob" inputmode="numeric" maxlength="6" aria-label="Digit 2"><input type="text" class="ob" inputmode="numeric" maxlength="6" aria-label="Digit 3"><input type="text" class="ob" inputmode="numeric" maxlength="6" aria-label="Digit 4"><input type="text" class="ob" inputmode="numeric" maxlength="6" aria-label="Digit 5"><input type="text" class="ob" inputmode="numeric" maxlength="6" aria-label="Digit 6"></div>
+      <button class="btn" id="averify" onclick="verifyCode()">Verify and continue</button>
+      <button class="back" style="margin:14px 0 0" onclick="$('a2').style.display='none';$('a1').style.display='block';$('aerr').textContent=''">← Use a different email</button>
+    </div>
+    <div class="err" id="aerr"></div><div class="note" id="anote"></div>
+  </div>
+</section>
+
+<section class="view" id="home">
+  <h1 id="hello">Type what you want.<br>Race who you want.</h1>
+  <p class="sub">Practise with a timer, type through real books, or share a room code and race your friends on their own devices.</p>
+  <div class="grid">
+    <button class="mode" onclick="go('timed')"><span class="ico">⏱</span><b>Timed test</b><span>30 seconds, 1 or 2 minutes. See speed and accuracy at the end.</span></button>
+    <button class="mode" onclick="go('library')"><span class="ico">📚</span><b>Book library</b><span>Thousands of real books. Pick one and type it page by page.</span></button>
+    <button class="mode" onclick="go('friends')"><span class="ico">👥</span><b>Type with friends</b><span>Create a room, share the code, race live from different systems.</span></button>
+    <button class="mode" onclick="go('own')"><span class="ico">✍️</span><b>My own text</b><span>Paste anything you want to practise: notes, lyrics, code.</span></button>
+  </div>
+</section>
+
+<section class="view" id="timed">
+  <button class="back" onclick="go('home')">← Back</button><h2>Timed test</h2><p class="sub">Choose a duration. The timer starts on your first key.</p>
+  <div class="row" id="times"></div><button class="btn" onclick="startTimed()">Start test</button>
+</section>
+
+<section class="view" id="library">
+  <button class="back" onclick="go('home')">← Back</button><h2>Book library</h2><p class="sub">Search any title or author, or pick from the popular books below.</p>
+  <div class="search"><input type="text" id="bq" placeholder="Search books, e.g. Sherlock, Dracula, Austen" onkeydown="if(event.key==='Enter')loadBooks()"><button class="btn" onclick="loadBooks()">Search</button></div>
+  <div id="cont"></div><h3 id="bhead">Popular books</h3><div class="bgrid" id="bgrid"></div><div class="err" id="berr"></div>
+</section>
+
+<section class="view" id="own">
+  <button class="back" onclick="go('home')">← Back</button><h2>My own text</h2><p class="sub">Paste or write the text you want to type.</p>
+  <textarea class="own" id="owntext" placeholder="Paste your text here…"></textarea><button class="btn" onclick="startOwn()">Start typing</button>
+</section>
+
+<section class="view" id="friends">
+  <button class="back" onclick="leaveRoom()">← Back</button><h2>Type with friends</h2><p class="sub">Everyone opens this same website and logs in. One person creates a room, the others join with the code.</p>
+  <div id="f-enter">
+    <div class="row"><button class="btn" onclick="createRoom()">Create room</button>
+      <input type="text" id="jcode" placeholder="Room code" maxlength="4" style="max-width:140px;text-transform:uppercase">
+      <button class="btn alt" onclick="joinRoom()">Join room</button></div>
+    <div class="err" id="ftoast"></div>
+  </div>
+  <div id="f-lobby" style="display:none">
+    <div>Room code. Share it with your friends:</div><div class="code" id="rcode">----</div>
+    <div class="players" id="lobbyPlayers"></div>
+    <div id="hostCtl"><p class="hint">Text for this race:</p><div class="row" id="rtext"></div><button class="btn" id="startRace" onclick="hostStart()">Start race</button></div>
+    <p class="hint" id="waitHost" style="display:none">Waiting for the host to start the race…</p>
+  </div>
+</section>
+
+<section class="view" id="play">
+  <div class="stats"><div class="stat"><small>Speed</small><b id="s-wpm">0</b> WPM</div><div class="stat"><small>Accuracy</small><b id="s-acc">100</b>%</div><div class="stat"><small id="s-lbl">Time</small><b id="s-time">0</b>s</div></div>
+  <div class="bar"><i id="pbar"></i></div>
+  <div class="ptitle" id="ptitle"></div>
+  <div class="paper" id="paper" onclick="ta.focus()"></div><textarea id="ta" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+  <div class="players" id="racePlayers"></div>
+  <p class="hint" id="phint">Click the text and start typing. Backspace works.</p>
+  <div class="row"><button class="btn alt" onclick="quit()">Quit</button><button class="snd" onclick="toggleSnd()"></button></div>
+</section>
+
+<section class="view" id="result">
+  <div class="big"><div>Your speed</div><div class="num" id="r-wpm">0</div><div>words per minute</div></div>
+  <div class="res"><div><small>Accuracy</small><b id="r-acc"></b></div><div><small>Characters</small><b id="r-chars"></b></div><div><small>Mistakes</small><b id="r-err"></b></div><div><small>Time</small><b id="r-time"></b></div></div>
+  <div id="r-rank"></div><div class="row" style="justify-content:center" id="r-btns"></div>
+</section>
+</main>
+<div class="count" id="count"></div>
+<div class="loading" id="loading"><div><div class="spin"></div><span id="ltxt">Opening book…</span><br><small style="color:var(--mute)">First time can take up to 30 seconds. Next time it opens instantly.</small></div></div>
+<div class="toast" id="toast" onclick="this.style.display='none'"></div>
+
+<script>
+const $=id=>document.getElementById(id), ta=$('ta');
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const WORDS="the of and to in is you that it he was for on are as with his they at be this from have or by one had not but what all were when we there can an your which their said if do will each about how up out them then she many some so these would other into has more her two like him see time could no make than first been its who now people my made over did down only way find use may water long little very after words called just where most know get through back much before go good new write our me man too any day same right look think also around another came come work three word must because does part even place well such here take why help put different away again off went old number great tell men say small every found still between name should home big give air line set own under read last never us left end along while might next sound below saw something thought both few those always looked show large often together asked house world going want school important until form food keep children feet land side without boy once animals life enough took sometimes four head above kind began almost live page got earth need far hand high year mother light country father let night picture being study second soon story since white ever paper hard near sentence better best across during today however sure knew try told young sun thing whole hear example heard several change answer room sea against top turned learn point city play toward five using himself usually".split(' ');
+let sndOn=localStorage.getItem('tyw_snd')!=='0',actx=null;
+function paintSnd(){document.querySelectorAll('.snd').forEach(b=>{b.textContent=sndOn?'🔊 Sound on':'🔇 Sound off';b.classList.toggle('off',!sndOn)})}
+function toggleSnd(){sndOn=!sndOn;localStorage.setItem('tyw_snd',sndOn?'1':'0');paintSnd();if(sndOn)tone('key');ta.focus()}
+function tone(kind){if(!sndOn)return;try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();const t=actx.currentTime,sr=actx.sampleRate;
+  if(kind==='done'){[660,880,1100].forEach((fr,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=fr;g.gain.setValueAtTime(.12,t+i*.1);g.gain.exponentialRampToValueAtTime(.001,t+i*.1+.3);o.connect(g);g.connect(actx.destination);o.start(t+i*.1);o.stop(t+i*.1+.32)});return}
+  const len=Math.floor(.035*sr),buf=actx.createBuffer(1,len,sr),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+  const n=actx.createBufferSource();n.buffer=buf;const f=actx.createBiquadFilter();f.type='bandpass';f.frequency.value=kind==='space'?900:kind==='err'?350:2400;f.Q.value=1.1;
+  const g=actx.createGain();g.gain.value=kind==='back'?.3:.7;n.connect(f);f.connect(g);g.connect(actx.destination);n.start(t);
+  const o=actx.createOscillator(),og=actx.createGain();o.type=kind==='err'?'sawtooth':'sine';o.frequency.setValueAtTime(kind==='err'?160:kind==='space'?110:190,t);o.frequency.exponentialRampToValueAtTime(60,t+.05);
+  og.gain.setValueAtTime(kind==='err'?.1:.22,t);og.gain.exponentialRampToValueAtTime(.001,t+.07);o.connect(og);og.connect(actx.destination);o.start(t);o.stop(t+.08)}catch{}}
+paintSnd();
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',9000)}
+let token=localStorage.getItem('tyw_token')||'',user=null,view='auth',mode=null,secs=30,room=null,ws=null,myId=null,text='',st=null,timer=null,pendingEmail='';
+const show=v=>{document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id===v));view=v;scrollTo(0,0)};
+async function api(p,body){const r=await fetch(p,{method:body?'POST':'GET',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:body&&JSON.stringify(body)});
+  const d=await r.json().catch(()=>({}));if(r.status===401&&token&&p!=='/api/me'){logout();}if(!r.ok)throw new Error(d.error||'Request failed');return d}
+function go(v){if(v==='library')openLibrary();show(v)}
+
+// ---------- accounts ----------
+function enter(u){user=u;$('hdr').classList.add('on');$('uname').textContent=u.name;$('best').textContent=u.best?'Best '+u.best+' WPM':'';$('hello').innerHTML='Hi '+esc(u.name)+'.<br>What do you want to type?';}
+async function boot(){if(!token)return show('auth');try{enter((await api('/api/me')).user);show('home')}catch{token='';localStorage.removeItem('tyw_token');show('auth')}}
+async function sendCode(){const name=$('aname').value.trim(),email=$('aemail').value.trim();$('aerr').textContent='';$('asend').disabled=true;
+  try{const d=await api('/api/otp/request',{name,email});pendingEmail=email;$('ashow').textContent=email;$('a1').style.display='none';$('a2').style.display='block';OB.forEach(b=>b.value='');OB[0].focus();
+    $('anote').textContent=d.dev?'Email sending is not set up on this server yet. The code is printed in the server terminal.':'Check your inbox (and spam folder). The code is valid for 10 minutes.'}
+  catch(e){$('aerr').textContent=e.message}$('asend').disabled=false}
+async function verifyCode(){$('aerr').textContent='';const code=getCode();if(code.length!==6){$('aerr').textContent='Enter all 6 digits of the code.';return}$('averify').disabled=true;
+  try{const d=await api('/api/otp/verify',{email:pendingEmail,code,name:$('aname').value});token=d.token;localStorage.setItem('tyw_token',token);enter(d.user);show('home')}
+  catch(e){$('aerr').textContent=e.message}$('averify').disabled=false}
+const OB=[...document.querySelectorAll('.ob')],getCode=()=>OB.map(b=>b.value).join('');
+function fillFrom(i,digits){digits.split('').slice(0,6-i).forEach((d,k)=>OB[i+k].value=d);OB[Math.min(i+digits.length,5)].focus()}
+OB.forEach((b,i)=>{
+  b.addEventListener('input',()=>{const d=b.value.replace(/\D/g,'');b.value='';if(d)fillFrom(i,d)});
+  b.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!b.value&&i>0){OB[i-1].value='';OB[i-1].focus();e.preventDefault()}
+    else if(e.key==='ArrowLeft'&&i>0)OB[i-1].focus();else if(e.key==='ArrowRight'&&i<5)OB[i+1].focus();else if(e.key==='Enter')verifyCode()});
+  b.addEventListener('paste',e=>{e.preventDefault();fillFrom(0,((e.clipboardData||window.clipboardData).getData('text')||'').replace(/\D/g,''))});
+  b.addEventListener('focus',()=>b.select())});
+function logout(){token='';user=null;localStorage.removeItem('tyw_token');if(ws){ws.onclose=null;ws.close();ws=null}$('hdr').classList.remove('on');$('a1').style.display='block';$('a2').style.display='none';show('auth')}
+
+// ---------- timed ----------
+$('times').innerHTML=[30,60,120].map(s=>`<button class="chip ${s===30?'on':''}" onclick="secs=${s};[...$('times').children].forEach(c=>c.classList.remove('on'));this.classList.add('on')">${s<60?s+' seconds':s/60+(s===60?' minute':' minutes')}</button>`).join('');
+const randWords=n=>Array.from({length:n},()=>WORDS[Math.random()*WORDS.length|0]).join(' ');
+function startTimed(){begin({kind:'timed',text:randWords(300),limit:secs,back:'timed'})}
+function startOwn(){const t=$('owntext').value.replace(/\s+/g,' ').trim();if(t.length<10){$('owntext').focus();return}begin({kind:'own',text:t,back:'own'})}
+
+// ---------- library ----------
+function coverHTML(b){return `<div class="cover">${b.cover?`<img src="${b.cover}" alt="" loading="lazy" onerror="this.remove()">`:''}<span>${esc(b.title.slice(0,50))}</span></div>`}
+async function openLibrary(){const p=Object.entries(user.progress||{}).sort((a,b)=>b[1].at-a[1].at).slice(0,6);
+  $('cont').innerHTML=p.length?`<h3>Continue reading</h3><div class="bgrid">${p.map(([id,b])=>`<button class="book" onclick="openBook(${id})">${coverHTML({title:b.title})}<b>${esc(b.title)}</b><span class="prog">Page ${Math.min(b.page+1,b.total)} of ${b.total}</span></button>`).join('')}</div>`:'';
+  if(!$('bgrid').children.length)loadBooks()}
+async function loadBooks(){const q=$('bq').value.trim();$('berr').textContent='';$('bgrid').innerHTML='<span class="hint">Loading books…</span>';$('bhead').textContent=q?'Results for "'+q+'"':'Popular books';
+  try{const l=await api('/api/books?q='+encodeURIComponent(q));$('bgrid').innerHTML=l.length?l.map(b=>`<button class="book" onclick="openBook(${b.id})">${coverHTML(b)}<b>${esc(b.title.slice(0,70))}</b><small>${esc(b.author)}</small></button>`).join(''):'<span class="hint">No books found.</span>'}
+  catch(e){$('bgrid').innerHTML='';$('berr').textContent='Could not load the library: '+e.message+'. The server needs internet access.';toast('Library error: '+e.message)}}
+async function openBook(id,pg){const L=$('loading');L.style.display='grid';
+  try{const b=await api('/api/book/'+id);let p=pg??(user.progress[id]?user.progress[id].page:0);if(p>=b.total)p=0;
+    const d=await api('/api/book/'+id+'/page/'+p);L.style.display='none';begin({kind:'book',book:b,page:p,text:d.text,back:'library'})}
+  catch(e){L.style.display='none';toast('Could not open the book: '+e.message);show('library')}}
+
+// ---------- engine ----------
+function begin(cfg){mode=cfg;text=cfg.text;st={start:0,keys:0,err:0,prev:0,done:false};ta.value='';
+  $('racePlayers').innerHTML='';$('s-wpm').textContent=0;$('s-acc').textContent=100;$('pbar').style.width=0;
+  $('ptitle').textContent=cfg.kind==='book'?cfg.book.title+' · page '+(cfg.page+1)+' of '+cfg.book.total:'';
+  $('s-lbl').textContent=cfg.limit?'Time left':'Time';$('s-time').textContent=cfg.limit||0;$('phint').textContent='Click the text and start typing. Backspace works.';
+  show('play');render();ta.focus();clearInterval(timer);timer=setInterval(tick,200)}
+function render(){const v=ta.value;let h='',w='';
+  for(let i=0;i<text.length;i++){const ch=text[i],k=i<v.length?(v[i]===ch?'ok':'bad'):'';
+    if(i===v.length)w+='<span class="cur"></span>';w+=`<span class="${k}">${esc(ch)}</span>`;
+    if(ch===' '){h+=`<span class="w">${w}</span>`;w=''}}
+  if(w)h+=`<span class="w">${w}</span>`;$('paper').innerHTML=h;
+  const c=$('paper').querySelector('.cur');if(c)$('paper').scrollTop=Math.max(0,c.offsetTop-70)}
+ta.addEventListener('input',()=>{if(!st||st.done)return;if(!st.start)st.start=Date.now();
+  if(ta.value.length>text.length)ta.value=ta.value.slice(0,text.length);
+  if(ta.value.length>st.prev){const i=ta.value.length-1;st.keys++;const bad=ta.value[i]!==text[i];if(bad)st.err++;tone(bad?'err':text[i]===' '?'space':'key')}else if(ta.value.length<st.prev)tone('back');
+  st.prev=ta.value.length;render();if(ta.value.length>=text.length)finish()});
+ta.addEventListener('paste',e=>e.preventDefault());
+function calc(){const v=ta.value;let ok=0;for(let i=0;i<v.length;i++)if(v[i]===text[i])ok++;
+  const el=st.start?(Date.now()-st.start)/60000:0,wpm=el>0.0008?Math.round(ok/5/el):0,acc=st.keys?Math.max(0,Math.round((st.keys-st.err)/st.keys*100)):100;
+  return{wpm,acc,el,pct:Math.round(v.length/text.length*100)}}
+function tick(){if(!st||st.done||view!=='play')return;const c=calc();$('s-wpm').textContent=c.wpm;$('s-acc').textContent=c.acc;
+  if(mode.limit){const left=st.start?Math.max(0,mode.limit-Math.floor((Date.now()-st.start)/1000)):mode.limit;$('s-time').textContent=left;$('pbar').style.width=st.start?(100-left/mode.limit*100)+'%':'0%';if(st.start&&left<=0)finish()}
+  else{$('s-time').textContent=st.start?Math.floor((Date.now()-st.start)/1000):0;$('pbar').style.width=c.pct+'%'}
+  if(mode.kind==='race'&&st.start)wsend({t:'progress',pct:c.pct,wpm:c.wpm,acc:c.acc,done:false})}
+function finish(){if(st.done)return;st.done=true;clearInterval(timer);const c=calc();
+  tone('done');if(mode.kind==='race')wsend({t:'progress',pct:100,wpm:c.wpm,acc:c.acc,done:true});
+  if(c.wpm>user.best)api('/api/best',{wpm:c.wpm}).then(d=>enter(d.user)).catch(()=>{});
+  $('r-wpm').textContent=c.wpm;$('r-acc').textContent=c.acc+'%';$('r-chars').textContent=ta.value.length;$('r-err').textContent=st.err;$('r-time').textContent=Math.round(c.el*60)+'s';
+  let btns='';$('r-rank').innerHTML='';
+  if(mode.kind==='book'){const b=mode.book,next=mode.page+1;api('/api/progress',{bookId:b.id,title:b.title,author:b.author,page:next>=b.total?0:next,total:b.total}).then(d=>user=d.user).catch(()=>{});
+    if(next<b.total)btns+=`<button class="btn" onclick="openBook(${b.id},${next})">Next page</button>`;
+    btns+=`<button class="btn alt" onclick="openBook(${b.id},${mode.page})">Retry page</button><button class="btn alt" onclick="go('library')">Library</button>`}
+  else if(mode.kind==='race'){btns='<button class="btn alt" onclick="show(\'friends\')">Back to room</button>';$('r-rank').innerHTML='<p class="hint" style="text-align:center">Live ranking:</p><div class="players" id="rank"></div>';renderRank()}
+  else btns=`<button class="btn" onclick="${mode.kind==='timed'?'startTimed()':'startOwn()'}">Try again</button><button class="btn alt" onclick="go('home')">Home</button>`;
+  $('r-btns').innerHTML=btns;show('result')}
+function quit(){clearInterval(timer);st=null;if(mode&&mode.kind==='race')show('friends');else go(mode?mode.back:'home')}
+
+// ---------- friends ----------
+const wsend=o=>ws&&ws.readyState===1&&ws.send(JSON.stringify({...o,token}));
+function connect(cb){if(ws&&ws.readyState===1)return cb();$('ftoast').textContent='';
+  ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host);ws.onopen=cb;
+  ws.onerror=()=>$('ftoast').textContent='Cannot reach the server. Make sure "npm start" is running.';
+  ws.onmessage=e=>{const m=JSON.parse(e.data);
+    if(m.t==='joined'){myId=m.id;$('f-enter').style.display='none';$('f-lobby').style.display='block'}
+    else if(m.t==='error')$('ftoast').textContent=m.msg;
+    else if(m.t==='room'){room=m;renderRoom()}
+    else if(m.t==='start')countdown(m.text)};
+  ws.onclose=()=>{room=null;$('f-enter').style.display='block';$('f-lobby').style.display='none'}}
+const createRoom=()=>connect(()=>wsend({t:'create'}));
+function joinRoom(){const c=$('jcode').value.trim().toUpperCase();if(c.length<4){$('ftoast').textContent='Enter the 4-letter room code.';return}connect(()=>wsend({t:'join',code:c}))}
+function leaveRoom(){if(ws){ws.onclose=null;ws.close();ws=null}room=null;$('f-enter').style.display='block';$('f-lobby').style.display='none';go('home')}
+let raceChoice='words';
+async function pickText(){if(raceChoice==='own')return $('owntext').value.replace(/\s+/g,' ').trim()||randWords(45);
+  if(raceChoice==='book'){try{const id=[11,1342,1661,84,2701,174][Math.random()*6|0],b=await api('/api/book/'+id);return(await api('/api/book/'+id+'/page/'+(20+Math.random()*Math.max(1,b.total-30)|0))).text}catch{return randWords(45)}}
+  return randWords(45)}
+const playersHTML=()=>room.players.map(p=>`<div class="pl ${p.id===myId?'mine':''}"><div class="t"><span>${esc(p.name)}${p.id===room.host?' (host)':''}${p.id===myId?' (you)':''}</span><span>${p.wpm} WPM</span></div><div class="bar"><i style="width:${p.pct}%"></i></div></div>`).join('');
+function renderRank(){const el=$('rank');if(!el||!room)return;const r=[...room.players].sort((a,b)=>(b.done-a.done)||b.wpm-a.wpm);
+  el.innerHTML=r.map((p,i)=>`<div class="pl ${p.id===myId?'mine':''}"><div class="t"><span>${i+1}. ${esc(p.name)}</span><span>${p.done?p.wpm+' WPM · '+p.acc+'%':'still typing… '+p.pct+'%'}</span></div></div>`).join('')}
+function renderRoom(){$('rcode').textContent=room.code;const host=room.host===myId;$('lobbyPlayers').innerHTML=playersHTML();
+  $('hostCtl').style.display=host?'block':'none';$('waitHost').style.display=host?'none':'block';
+  if(host&&!$('rtext').children.length)$('rtext').innerHTML=[['words','Random words'],['book','Random book page'],['own','My own text']].map(([k,l])=>`<button class="chip ${k===raceChoice?'on':''}" onclick="raceChoice='${k}';[...$('rtext').children].forEach(c=>c.classList.remove('on'));this.classList.add('on')">${l}</button>`).join('');
+  if(!host)$('rtext').innerHTML='';
+  if(view==='play'&&mode&&mode.kind==='race')$('racePlayers').innerHTML=playersHTML();if(view==='result')renderRank()}
+async function hostStart(){$('startRace').disabled=true;wsend({t:'start',text:await pickText()});setTimeout(()=>$('startRace').disabled=false,1500)}
+function countdown(t){const c=$('count');c.style.display='grid';let n=3;c.textContent=n;
+  const iv=setInterval(()=>{n--;if(n>0)c.textContent=n;else{clearInterval(iv);c.style.display='none';begin({kind:'race',text:t,back:'friends'});$('racePlayers').innerHTML=playersHTML();$('phint').textContent='Go! Type as fast as you can.'}},1000)}
+boot();
+</script></body></html>
